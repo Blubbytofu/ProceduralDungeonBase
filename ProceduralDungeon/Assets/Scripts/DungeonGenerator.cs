@@ -24,10 +24,12 @@ public class DungeonGenerator : MonoBehaviour
     private HashSet<FloorNode> roomsTileSet;
     private HashSet<GameObject> wallsTileSet;
     private HashSet<GameObject> ceilingsTileSet;
+    private HashSet<GameObject> cornersTileSet;
 
     [SerializeField] private GameObject floorTile;
     [SerializeField] private GameObject wallTile;
     [SerializeField] private GameObject ceilingTile;
+    [SerializeField] private GameObject cornerTile;
     private List<GameObject> worldTiles;
 
     [Range(0, 100)] [SerializeField] private int randomRoomConnectionChance;
@@ -35,7 +37,10 @@ public class DungeonGenerator : MonoBehaviour
     [Range(0, 100)] [SerializeField] private int secondRoomConnectionChance;
 
     [SerializeField] private bool generateWalls;
+    [SerializeField] private bool generateCorners;
     [SerializeField] private bool generateCeiling;
+
+    [SerializeField] private GameObject pointer;
 
     private void Start()
     {
@@ -48,9 +53,9 @@ public class DungeonGenerator : MonoBehaviour
         hallwaysTileSet = new HashSet<FloorNode>();
         wallsTileSet = new HashSet<GameObject>();
         ceilingsTileSet = new HashSet<GameObject>();
+        cornersTileSet = new HashSet<GameObject>();
         dungeonFloor = new FloorNode[dungeonSize.x, dungeonSize.y];
         roomsList = new List<Room>();
-
 
         CreateFloor();
         LinkRooms();
@@ -60,9 +65,17 @@ public class DungeonGenerator : MonoBehaviour
         {
             InstantiateWalls();
         }
+        if (generateCorners)
+        {
+            InstantiateCorners();
+        }
         if (generateCeiling)
         {
             InstantiateCeiling();
+        }
+        foreach (FloorNode f in hallwaysTileSet)
+        {
+            Instantiate(pointer, f.GetWorldPos(), Quaternion.identity);
         }
     }
 
@@ -102,6 +115,99 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    private void InstantiateCorners()
+    {
+        for (int z = 0; z < dungeonSize.y; z++)
+        {
+            for (int x = 0; x < dungeonSize.x; x++)
+            {
+                if (!dungeonFloor[x, z].GetWalkable())
+                {
+                    continue;
+                }
+                FloorNode currentNode = dungeonFloor[x, z];
+                Vector3 currentWorldPos = currentNode.GetWorldPos();
+                if (currentNode.ne != null && !currentNode.ne.GetWalkable())
+                {
+                    // inner corner vs outer corner
+                    if (currentNode.n.GetWalkable() && currentNode.e.GetWalkable())
+                    {
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, -90, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                    }
+                    else if (!currentNode.n.GetWalkable() && !currentNode.e.GetWalkable())
+                    {
+                        /*
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 90, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                        */
+                    }
+                }
+                if (currentNode.se != null && !currentNode.se.GetWalkable())
+                {
+                    if (currentNode.s.GetWalkable() && currentNode.e.GetWalkable())
+                    {
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, -tileRadius), Quaternion.Euler(90, 0, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                    }
+                    else if (!currentNode.s.GetWalkable() && !currentNode.e.GetWalkable())
+                    {
+                        /*
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 180, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                        */
+                    }
+                }
+                if (currentNode.sw != null && !currentNode.sw.GetWalkable())
+                {
+                    if (currentNode.s.GetWalkable() && currentNode.w.GetWalkable())
+                    {
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, -tileRadius), Quaternion.Euler(90, 90, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                    }
+                    else if (!currentNode.s.GetWalkable() && !currentNode.w.GetWalkable())
+                    {
+                        /*
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, -90, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                        */
+                    }
+                }
+                if (currentNode.nw != null && !currentNode.nw.GetWalkable())
+                {
+                    if (currentNode.n.GetWalkable() && currentNode.w.GetWalkable())
+                    {
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 180, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                    }
+                    else if (!currentNode.n.GetWalkable() && !currentNode.w.GetWalkable())
+                    {
+                        /*
+                        GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 0, 0));
+                        worldTiles.Add(obj);
+                        obj.transform.SetParent(transform);
+                        cornersTileSet.Add(obj);
+                        */
+                    }
+                }
+            }
+        }
+    }
+
     private void InstantiateWalls()
     {
         for (int z = 0; z < dungeonSize.y; z++)
@@ -113,6 +219,35 @@ public class DungeonGenerator : MonoBehaviour
                     continue;
                 }
                 Vector3 currentWorldPos = dungeonFloor[x, z].GetWorldPos();
+                if (dungeonFloor[x, z].n != null && !dungeonFloor[x, z].n.GetWalkable())
+                {
+                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, tileRadius), Quaternion.Euler(-90, 0, 0));
+                    worldTiles.Add(obj);
+                    obj.transform.SetParent(transform);
+                    wallsTileSet.Add(obj);
+                }
+                if (dungeonFloor[x, z].e != null && !dungeonFloor[x, z].e.GetWalkable())
+                {
+                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(tileRadius, tileRadius, 0), Quaternion.Euler(90, -90, 0));
+                    worldTiles.Add(obj);
+                    obj.transform.SetParent(transform);
+                    wallsTileSet.Add(obj);
+                }
+                if (dungeonFloor[x, z].s != null && !dungeonFloor[x, z].s.GetWalkable())
+                {
+                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, -tileRadius), Quaternion.Euler(90, 0, 0));
+                    worldTiles.Add(obj);
+                    obj.transform.SetParent(transform);
+                    wallsTileSet.Add(obj);
+                }
+                if (dungeonFloor[x, z].w != null && !dungeonFloor[x, z].w.GetWalkable())
+                {
+                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, 0), Quaternion.Euler(90, 90, 0));
+                    worldTiles.Add(obj);
+                    obj.transform.SetParent(transform);
+                    wallsTileSet.Add(obj);
+                }
+                /*
                 bool n = true;
                 bool e = true;
                 bool s = true;
@@ -170,6 +305,7 @@ public class DungeonGenerator : MonoBehaviour
                     obj.transform.SetParent(transform);
                     wallsTileSet.Add(obj);
                 }
+                */
             }
         }
     }
@@ -269,7 +405,43 @@ public class DungeonGenerator : MonoBehaviour
             exclusion.ExceptWith(firstCenter.GetParentRoom().GetRoomApproximation());
             exclusion.ExceptWith(secondCenter.GetParentRoom().GetRoomApproximation());
             HashSet<FloorNode> path = pathFinder.FindPath(firstCenter, secondCenter, exclusion);
-            hallwaysTileSet.UnionWith(path);
+            //hallwaysTileSet.UnionWith(path);
+
+            /*
+             * This whole part is to stop the path once it touches a room so there won't be hallway tiles inside holes in a room
+             */
+            List<FloorNode> pathList = new List<FloorNode>();
+            List<FloorNode> refinedPath = new List<FloorNode>();
+            foreach (FloorNode node in path)
+            {
+                pathList.Add(node);
+            }
+            int mid = pathList.Count / 2;
+            int j = mid;
+            int k = mid;
+            refinedPath.Add(pathList[mid]);
+            while (j > 0)
+            {
+                j--;
+                if (pathList[j].GetWalkable())
+                {
+                    break;
+                }
+                refinedPath.Add(pathList[j]);
+            }
+            while (k < pathList.Count - 1)
+            {
+                k++;
+                if (pathList[k].GetWalkable())
+                {
+                    break;
+                }
+                refinedPath.Add(pathList[k]);
+            }
+            foreach (FloorNode node in refinedPath)
+            {
+                hallwaysTileSet.Add(node);
+            }
         }
 
         foreach (FloorNode tile in hallwaysTileSet)
@@ -286,21 +458,25 @@ public class DungeonGenerator : MonoBehaviour
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY]);
+            node.w = dungeonFloor[targetX - 1, targetY];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY]);
+            node.e = dungeonFloor[targetX + 1, targetY];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX, targetY - 1]);
+            node.s = dungeonFloor[targetX, targetY - 1];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX, targetY + 1]);
+            node.n = dungeonFloor[targetX, targetY + 1];
         }
         catch { }
         node.SetNeighbors(list);
@@ -314,21 +490,25 @@ public class DungeonGenerator : MonoBehaviour
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY - 1]);
+            node.sw = dungeonFloor[targetX - 1, targetY - 1];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY + 1]);
+            node.nw = dungeonFloor[targetX - 1, targetY + 1];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY - 1]);
+            node.se = dungeonFloor[targetX + 1, targetY - 1];
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY + 1]);
+            node.ne = dungeonFloor[targetX + 1, targetY + 1];
         }
         catch { }
         node.SetCorners(list);

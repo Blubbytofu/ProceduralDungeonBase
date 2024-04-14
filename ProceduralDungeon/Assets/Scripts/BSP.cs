@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = System.Random;
 
 /**
- * A specialized binaru space partitioning algorithm using a special kind of tree.
+ * A specialized binary space partitioning algorithm using a special kind of tree.
  */
 public class BSP<T> where T : Room
 {

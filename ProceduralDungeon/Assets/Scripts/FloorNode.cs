@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class FloorNode
@@ -12,7 +13,15 @@ public class FloorNode
 
     // caches
     private List<FloorNode> neighbors;
+    public FloorNode n;
+    public FloorNode e;
+    public FloorNode s;
+    public FloorNode w;
     private List<FloorNode> corners;
+    public FloorNode ne;
+    public FloorNode se;
+    public FloorNode sw;
+    public FloorNode nw;
 
     // A* Pathfinding
     private FloorNode pathParent;
