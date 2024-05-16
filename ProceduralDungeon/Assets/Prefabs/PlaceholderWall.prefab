@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3726532930698100754}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlaceholderWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,8 @@ GameObject:
   - component: {fileID: 4307545461734207818}
   - component: {fileID: 1373693106706270208}
   - component: {fileID: 2465136659512061076}
-  m_Layer: 0
+  - component: {fileID: 1579968385323959905}
+  m_Layer: 6
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,3 +116,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1579968385323959905
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003876009416417905}
+  m_Material: {fileID: 13400000, guid: 3b90477b26168ed42b27e4e18a6a4827, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 0.375, z: 3.75}
+  m_Center: {x: 0, y: 0.1875, z: 0}

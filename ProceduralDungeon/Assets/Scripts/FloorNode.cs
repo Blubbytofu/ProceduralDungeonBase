@@ -10,29 +10,41 @@ public class FloorNode
     private bool walkable;
     private Vector2Int gridPos;
     private Room parentRoom;
+    private bool occupied;
 
     // caches
     private List<FloorNode> neighbors;
-    public FloorNode n;
-    public FloorNode e;
-    public FloorNode s;
-    public FloorNode w;
+    private FloorNode n;
+    private FloorNode e;
+    private FloorNode s;
+    private FloorNode w;
     private List<FloorNode> corners;
-    public FloorNode ne;
-    public FloorNode se;
-    public FloorNode sw;
-    public FloorNode nw;
+    private FloorNode ne;
+    private FloorNode se;
+    private FloorNode sw;
+    private FloorNode nw;
 
     // A* Pathfinding
     private FloorNode pathParent;
     private int gCost;
     private int hCost;
+    // f cost is calculated in a method
 
     public FloorNode(Vector3 _worldPos, bool _walkable, Vector2Int _gridPos)
     {
         worldPos = _worldPos;
         walkable = _walkable;
         gridPos = _gridPos;
+    }
+
+    public void SetOccupied(bool state)
+    {
+        occupied = state;
+    }
+
+    public bool GetOccupied()
+    {
+        return occupied;
     }
 
     public Vector3 GetWorldPos()
@@ -60,9 +72,49 @@ public class FloorNode
         neighbors = _neighbors;
     }
 
+    public void SetN(FloorNode node)
+    {
+        n = node;
+    }
+
+    public void SetE(FloorNode node)
+    {
+        e = node;
+    }
+
+    public void SetS(FloorNode node)
+    {
+        s = node;
+    }
+
+    public void SetW(FloorNode node)
+    {
+        w = node;
+    }
+
     public List<FloorNode> GetNeighbors()
     {
         return neighbors;
+    }
+
+    public FloorNode GetN()
+    {
+        return n;
+    }
+
+    public FloorNode GetE()
+    {
+        return e;
+    }
+
+    public FloorNode GetS()
+    {
+        return s;
+    }
+
+    public FloorNode GetW()
+    {
+        return w;
     }
 
     public void SetCorners(List<FloorNode> _corners)
@@ -70,9 +122,49 @@ public class FloorNode
         corners = _corners;
     }
 
+    public void SetNE(FloorNode node)
+    {
+        ne = node;
+    }
+
+    public void SetSE(FloorNode node)
+    {
+        se = node;
+    }
+
+    public void SetNW(FloorNode node)
+    {
+        nw = node;
+    }
+
+    public void SetSW(FloorNode node)
+    {
+        sw = node;
+    }
+
     public List<FloorNode> GetCorners()
     {
         return corners;
+    }
+
+    public FloorNode GetNE()
+    {
+        return ne;
+    }
+
+    public FloorNode GetSE()
+    {
+        return se;
+    }
+
+    public FloorNode GetNW()
+    {
+        return nw;
+    }
+
+    public FloorNode GetSW()
+    {
+        return sw;
     }
 
     public void SetParentRoom(Room _parentRoom)

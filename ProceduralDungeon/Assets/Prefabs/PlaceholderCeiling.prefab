@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7860126189199424476}
   - component: {fileID: 5027116985949602454}
   - component: {fileID: 8423510736478201346}
-  m_Layer: 0
+  - component: {fileID: 3405882020493521690}
+  m_Layer: 6
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3405882020493521690
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414948739229411559}
+  m_Material: {fileID: 13400000, guid: 3b90477b26168ed42b27e4e18a6a4827, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 0.125, z: 4}
+  m_Center: {x: 0, y: 0.0625, z: 0}
 --- !u!1 &7939603709208858686
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7306231871752686212}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlaceholderCeiling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,5 +127,5 @@ Transform:
   m_Children:
   - {fileID: 7860126189199424476}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

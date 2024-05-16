@@ -73,7 +73,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             InstantiateCeiling();
         }
-        foreach (FloorNode f in hallwaysTileSet)
+        foreach (FloorNode f in roomsTileSet)
         {
             Instantiate(pointer, f.GetWorldPos(), Quaternion.identity);
         }
@@ -127,82 +127,82 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 FloorNode currentNode = dungeonFloor[x, z];
                 Vector3 currentWorldPos = currentNode.GetWorldPos();
-                if (currentNode.ne != null && !currentNode.ne.GetWalkable())
+                if (currentNode.GetNE() != null && !currentNode.GetNE().GetWalkable())
                 {
                     // inner corner vs outer corner
-                    if (currentNode.n.GetWalkable() && currentNode.e.GetWalkable())
+                    if (currentNode.GetN().GetWalkable() && currentNode.GetE().GetWalkable())
                     {
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, -90, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
                     }
-                    else if (!currentNode.n.GetWalkable() && !currentNode.e.GetWalkable())
+                    /*
+                    else if (!currentNode.GetN().GetWalkable() && !currentNode.GetE().GetWalkable())
                     {
-                        /*
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 90, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
-                        */
                     }
+                    */
                 }
-                if (currentNode.se != null && !currentNode.se.GetWalkable())
+                if (currentNode.GetSE() != null && !currentNode.GetSE().GetWalkable())
                 {
-                    if (currentNode.s.GetWalkable() && currentNode.e.GetWalkable())
+                    if (currentNode.GetS().GetWalkable() && currentNode.GetE().GetWalkable())
                     {
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, -tileRadius), Quaternion.Euler(90, 0, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
                     }
-                    else if (!currentNode.s.GetWalkable() && !currentNode.e.GetWalkable())
+                    /*
+                    else if (!currentNode.GetS().GetWalkable() && !currentNode.GetE().GetWalkable())
                     {
-                        /*
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 180, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
-                        */
                     }
+                    */
                 }
-                if (currentNode.sw != null && !currentNode.sw.GetWalkable())
+                if (currentNode.GetSW() != null && !currentNode.GetSW().GetWalkable())
                 {
-                    if (currentNode.s.GetWalkable() && currentNode.w.GetWalkable())
+                    if (currentNode.GetS().GetWalkable() && currentNode.GetW().GetWalkable())
                     {
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, -tileRadius), Quaternion.Euler(90, 90, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
                     }
-                    else if (!currentNode.s.GetWalkable() && !currentNode.w.GetWalkable())
+                    /*
+                    else if (!currentNode.GetS().GetWalkable() && !currentNode.GetW().GetWalkable())
                     {
-                        /*
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, -90, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
-                        */
                     }
+                    */
                 }
-                if (currentNode.nw != null && !currentNode.nw.GetWalkable())
+                if (currentNode.GetNW() != null && !currentNode.GetNW().GetWalkable())
                 {
-                    if (currentNode.n.GetWalkable() && currentNode.w.GetWalkable())
+                    if (currentNode.GetN().GetWalkable() && currentNode.GetW().GetWalkable())
                     {
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 180, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
                     }
-                    else if (!currentNode.n.GetWalkable() && !currentNode.w.GetWalkable())
+                    /*
+                    else if (!currentNode.GetN().GetWalkable() && !currentNode.GetW().GetWalkable())
                     {
-                        /*
                         GameObject obj = Instantiate(cornerTile, currentWorldPos + new Vector3(tileRadius, tileRadius, tileRadius), Quaternion.Euler(90, 0, 0));
                         worldTiles.Add(obj);
                         obj.transform.SetParent(transform);
                         cornersTileSet.Add(obj);
-                        */
                     }
+                    */
                 }
             }
         }
@@ -219,93 +219,34 @@ public class DungeonGenerator : MonoBehaviour
                     continue;
                 }
                 Vector3 currentWorldPos = dungeonFloor[x, z].GetWorldPos();
-                if (dungeonFloor[x, z].n != null && !dungeonFloor[x, z].n.GetWalkable())
+                if (dungeonFloor[x, z].GetN() != null && !dungeonFloor[x, z].GetN().GetWalkable())
                 {
                     GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, tileRadius), Quaternion.Euler(-90, 0, 0));
                     worldTiles.Add(obj);
                     obj.transform.SetParent(transform);
                     wallsTileSet.Add(obj);
                 }
-                if (dungeonFloor[x, z].e != null && !dungeonFloor[x, z].e.GetWalkable())
+                if (dungeonFloor[x, z].GetE() != null && !dungeonFloor[x, z].GetE().GetWalkable())
                 {
                     GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(tileRadius, tileRadius, 0), Quaternion.Euler(90, -90, 0));
                     worldTiles.Add(obj);
                     obj.transform.SetParent(transform);
                     wallsTileSet.Add(obj);
                 }
-                if (dungeonFloor[x, z].s != null && !dungeonFloor[x, z].s.GetWalkable())
+                if (dungeonFloor[x, z].GetS() != null && !dungeonFloor[x, z].GetS().GetWalkable())
                 {
                     GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, -tileRadius), Quaternion.Euler(90, 0, 0));
                     worldTiles.Add(obj);
                     obj.transform.SetParent(transform);
                     wallsTileSet.Add(obj);
                 }
-                if (dungeonFloor[x, z].w != null && !dungeonFloor[x, z].w.GetWalkable())
+                if (dungeonFloor[x, z].GetW() != null && !dungeonFloor[x, z].GetW().GetWalkable())
                 {
                     GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, 0), Quaternion.Euler(90, 90, 0));
                     worldTiles.Add(obj);
                     obj.transform.SetParent(transform);
                     wallsTileSet.Add(obj);
                 }
-                /*
-                bool n = true;
-                bool e = true;
-                bool s = true;
-                bool w = true;
-                foreach (FloorNode neighbor in dungeonFloor[x, z].GetNeighbors())
-                {
-                    if (!neighbor.GetWalkable())
-                    {
-                        continue;
-                    }
-
-                    Vector3 diff = neighbor.GetWorldPos() - currentWorldPos;
-                    if (diff == new Vector3(tileDiameter, 0, 0))
-                    {
-                        e = false;
-                    }
-                    else if (diff == new Vector3(-tileDiameter, 0, 0))
-                    {
-                        w = false;
-                    }
-                    else if (diff == new Vector3(0, 0, tileDiameter))
-                    {
-                        n = false;
-                    }
-                    else if (diff == new Vector3(0, 0, -tileDiameter))
-                    {
-                        s = false;
-                    }
-                }
-                if (n)
-                {
-                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, tileRadius), Quaternion.Euler(-90, 0, 0));
-                    worldTiles.Add(obj);
-                    obj.transform.SetParent(transform);
-                    wallsTileSet.Add(obj);
-                }
-                if (e)
-                {
-                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(tileRadius, tileRadius, 0), Quaternion.Euler(90, -90, 0));
-                    worldTiles.Add(obj);
-                    obj.transform.SetParent(transform);
-                    wallsTileSet.Add(obj);
-                }
-                if (s)
-                {
-                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(0, tileRadius, -tileRadius), Quaternion.Euler(90, 0, 0));
-                    worldTiles.Add(obj);
-                    obj.transform.SetParent(transform);
-                    wallsTileSet.Add(obj);
-                }
-                if (w)
-                {
-                    GameObject obj = Instantiate(wallTile, currentWorldPos + new Vector3(-tileRadius, tileRadius, 0), Quaternion.Euler(90, 90, 0));
-                    worldTiles.Add(obj);
-                    obj.transform.SetParent(transform);
-                    wallsTileSet.Add(obj);
-                }
-                */
             }
         }
     }
@@ -458,25 +399,25 @@ public class DungeonGenerator : MonoBehaviour
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY]);
-            node.w = dungeonFloor[targetX - 1, targetY];
+            node.SetW(dungeonFloor[targetX - 1, targetY]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY]);
-            node.e = dungeonFloor[targetX + 1, targetY];
+            node.SetE(dungeonFloor[targetX + 1, targetY]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX, targetY - 1]);
-            node.s = dungeonFloor[targetX, targetY - 1];
+            node.SetS(dungeonFloor[targetX, targetY - 1]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX, targetY + 1]);
-            node.n = dungeonFloor[targetX, targetY + 1];
+            node.SetN(dungeonFloor[targetX, targetY + 1]);
         }
         catch { }
         node.SetNeighbors(list);
@@ -490,25 +431,25 @@ public class DungeonGenerator : MonoBehaviour
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY - 1]);
-            node.sw = dungeonFloor[targetX - 1, targetY - 1];
+            node.SetSW(dungeonFloor[targetX - 1, targetY - 1]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX - 1, targetY + 1]);
-            node.nw = dungeonFloor[targetX - 1, targetY + 1];
+            node.SetNW(dungeonFloor[targetX - 1, targetY + 1]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY - 1]);
-            node.se = dungeonFloor[targetX + 1, targetY - 1];
+            node.SetSE(dungeonFloor[targetX + 1, targetY - 1]);
         }
         catch { }
         try
         {
             list.Add(dungeonFloor[targetX + 1, targetY + 1]);
-            node.ne = dungeonFloor[targetX + 1, targetY + 1];
+            node.SetNE(dungeonFloor[targetX + 1, targetY + 1]);
         }
         catch { }
         node.SetCorners(list);
